@@ -37,4 +37,32 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $exception
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     *
+     * @throws \Throwable
+     */
+    public function render($request, Throwable $exception)
+    {
+
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return response()->json(['message' => 'not results found.'], 404);
+        };
+
+        if ($exception instanceof \Illuminate\Contracts\Encryption\DecryptException) {
+            return response()->json(['message' => 'not results found.'], 404);
+        };
+
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException) {
+            return response()->json(['message' => 'method not allowed.'], 503);
+        };
+        
+        return parent::render($request, $exception);
+    }
 }
